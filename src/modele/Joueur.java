@@ -1,23 +1,13 @@
 package modele;
+
+import controler.Global;
+
 /**
  * Gestion des joueurs
  *
  */
-public class Joueur extends Objet {
+public class Joueur extends Objet implements Global {
 
-	/**
-	 * vie de départ pour tous les joueurs
-	 */
-	private static final int MAXVIE = 10 ;
-	/**
-	 * gain de points de vie lors d'une attaque
-	 */
-	private static final int GAIN = 1 ; 
-	/**
-	 * perte de points de vie lors d'une attaque
-	 */
-	private static final int PERTE = 2 ; 
-	
 	/**
 	 * pseudo saisi
 	 */
@@ -25,7 +15,7 @@ public class Joueur extends Objet {
 	/**
 	 * n° correspondant au personnage (avatar) pour le fichier correspondant
 	 */
-	private int numPerso ; 
+	private int num_perso ; 
 	/**
 	 * instance de JeuServeur pour communiquer avec lui
 	 */
@@ -55,11 +45,13 @@ public class Joueur extends Objet {
 
 	/**
 	 * Initialisation d'un joueur (pseudo et numéro, calcul de la 1ère position, affichage, création de la boule)
+	 * @param num_perso numéro du personnage
+	 * @param pseudo pseudo du joueur
 	 */
-	public void initPerso(String pseudo, int numPerso) {
-		this.pseudo=pseudo;
-		this.numPerso=numPerso;
-		System.out.println("joueur "+pseudo+" - num perso "+numPerso+" créé");
+	public void initPerso(String pseudo, int num_perso) {
+		this.pseudo = pseudo;
+		this.num_perso = num_perso;
+		System.out.println("joueur "+pseudo+" - num perso "+num_perso+" créé");
 	}
 
 	/**

@@ -3,7 +3,6 @@ package modele;
 import java.net.Socket;
 
 import controler.Controle;
-import outils.connexion.AsyncResponse;
 import outils.connexion.Connection;
 
 /**
@@ -14,12 +13,13 @@ public abstract class Jeu {
 	/**
 	 * propriété de type Controle
 	 */
-	protected Controle control;
+	protected Controle controle;
 
 	/**
 	 * Réception d'une connexion (pour communiquer avec un ordinateur distant)
+	 * * @param connection TODO
 	 */
-	public abstract void connexion(Connection connection, Socket socket, AsyncResponse delegate) ;
+	public abstract void connexion(Connection connection) ;
 	
 	/**
 	 * Réception d'une information provenant de l'ordinateur distant
@@ -35,7 +35,7 @@ public abstract class Jeu {
 	 * Envoi d'une information vers un ordinateur distant
 	 */
 	public void envoi(Connection connection, Object info) {
-		control.envoi(connection, info);
+		this.controle.envoi(connection, info);
 	}
 	
 }

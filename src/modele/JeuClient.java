@@ -3,7 +3,6 @@ package modele;
 import java.net.Socket;
 
 import controler.Controle;
-import outils.connexion.AsyncResponse;
 import outils.connexion.Connection;
 
 /**
@@ -16,21 +15,22 @@ public class JeuClient extends Jeu {
 	 */
 	public Controle controle;
 	/**
-	 * Connection avec le serveur
+	 * objet de connexion pour communiquer avec le serveur
 	 */
-	public Connection connectionServeur;
+	public Connection connection;
 	/**
 	 * Constructreur
 	 */
 	public JeuClient(Controle controle) {
+		super.controle=controle;
 	}
 	
 	/**
 	 * Réception d'une connexion (pour communiquer avec un ordinateur distant)
 	 */
 	@Override
-	public void connexion(Connection connection, Socket socket, AsyncResponse delegate) {
-		Connection connectionServeur = new Connection(socket, delegate);
+	public void connexion(Connection connection) {
+		this.connection = connection;
 	}
 
 	@Override
@@ -44,8 +44,10 @@ public class JeuClient extends Jeu {
 	/**
 	 * Envoi d'une information vers le serveur
 	 * fais appel une fois à l'envoi dans la classe Jeu
+	 * @param info information à envoyer au serveur
 	 */
-	public void envoi(Connection connectionServeur, Object info) {
+	public void envoi(Object info) {
+		super.envoi(this.connection, info);
 	}
 
 }

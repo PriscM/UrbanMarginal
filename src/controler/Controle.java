@@ -17,12 +17,7 @@ import vue.ChoixJoueur;
  * @author emds
  *
  */
-public class Controle implements AsyncResponse {
-
-	/**
-	 * N° du port d'écoute du serveur
-	 */
-	private static final int PORT = 6666;
+public class Controle implements AsyncResponse, Global {
 	/**
 	 * frame EntreeJeu
 	 */
@@ -36,7 +31,7 @@ public class Controle implements AsyncResponse {
 	 */
 	private ChoixJoueur frmChoixJoueur;
 	/**
-	 * type du jeu: client ou serveur
+	 *  instance du jeu (JeuServeur ou JeuClient)
 	 */
 	private Jeu leJeu;
 
@@ -47,12 +42,7 @@ public class Controle implements AsyncResponse {
 	public static void main(String[] args) {
 		new Controle();
 	}
-	/**
-	 * Méthode envoi d'information à une connection
-	 */
-	public void envoi (Connection connection, Object object) {
-		
-	}
+
 	
 	/**
 	 * Constructeur
@@ -88,31 +78,37 @@ public class Controle implements AsyncResponse {
 		this.frmChoixJoueur.dispose();
 		this.frmArene.setVisible(true);
 		this.leJeu= new JeuClient(this);
-		((JeuClient)leJeu).envoi("pseudo" + "~" + pseudo + "~" + num_perso);
+		((JeuClient)leJeu).envoi(PSEUDO+STRINGSEPARE+pseudo+STRINGSEPARE+num_perso);
 	}
 	
 	/**
-	 * Méthode réception de AsyncResponse redéfinie ici
+	 * Envoi d'informations vers l'ordinateur distant
+	 * @param connection objet de connexion pour l'envoi vers l'ordinateur distant
+	 * @param info information à envoyer
 	 */
+	public void envoi (Connection connection, Object info) {
+		connection.envoi(info);	
+	}
+	
 	@Override
 	public void reception(Connection connection, String ordre, Object info) {
 		switch(ordre) {
-		case "connexion" :
+		case CONNEXION :
 			if(!(this.leJeu instanceof JeuServeur)) {
 				this.leJeu=new JeuClient(this);
-				leJeu.connexion(connection, info);
+				this.leJeu.connexion(connection);
 				this.frmEntreeJeu.dispose();
 				this.frmArene = new Arene();
 				this.frmChoixJoueur = new ChoixJoueur(this);
 				this.frmChoixJoueur.setVisible(true);
 			}else {
-				leJeu.connexion(connection, info);
+				this.leJeu.connexion(connection);
 			}
 			break;
-		case "reception" :
-			leJeu.reception(connection, info);
+		case RECEPTION :
+			this.leJeu.reception(connection, info);
 			break;
-		case "deconnexion" :
+		case DECONNEXION :
 			break;
 		}		
 	}

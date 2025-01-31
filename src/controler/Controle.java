@@ -1,5 +1,8 @@
 package controler;
 
+import modele.Jeu;
+import modele.JeuClient;
+import modele.JeuServeur;
 import outils.connexion.AsyncResponse;
 import outils.connexion.ClientSocket;
 import outils.connexion.Connection;
@@ -33,9 +36,9 @@ public class Controle implements AsyncResponse {
 	 */
 	private ChoixJoueur frmChoixJoueur;
 	/**
-	 * type du jeu : client ou serveur
+	 * type du jeu: client ou serveur
 	 */
-	private String typeJeu;
+	private Jeu leJeu;
 
 	/**
 	 * Méthode de démarrage
@@ -43,6 +46,12 @@ public class Controle implements AsyncResponse {
 	 */
 	public static void main(String[] args) {
 		new Controle();
+	}
+	/**
+	 * Méthode envoi d'information à une connection
+	 */
+	public void envoi (Connection connection, Object object) {
+		
 	}
 	
 	/**
@@ -58,14 +67,13 @@ public class Controle implements AsyncResponse {
 	 * @param info information à traiter
 	 */
 	public void evenementEntreeJeu(String info) {
-		if(info.equals("serveur")) {
-			this.typeJeu = "serveur";
+		if(info.equals("serveur")) {			
 			new ServeurSocket(this, PORT);
+			this.leJeu = new JeuServeur(this);
 			this.frmEntreeJeu.dispose();
 			this.frmArene = new Arene();
 			this.frmArene.setVisible(true);
 		} else {
-			this.typeJeu = "client";
 			new ClientSocket(this, info, PORT);
 		}
 		
@@ -79,6 +87,8 @@ public class Controle implements AsyncResponse {
 	public void evenementChoixJoueur(String pseudo, int num_perso) {
 		this.frmChoixJoueur.dispose();
 		this.frmArene.setVisible(true);
+		this.leJeu= new JeuClient(this);
+		((JeuClient)leJeu).envoi("pseudo" + "~" + pseudo + "~" + num_perso);
 	}
 	
 	/**
@@ -88,14 +98,19 @@ public class Controle implements AsyncResponse {
 	public void reception(Connection connection, String ordre, Object info) {
 		switch(ordre) {
 		case "connexion" :
-			if(this.typeJeu.equals("client")) {
+			if(!(this.leJeu instanceof JeuServeur)) {
+				this.leJeu=new JeuClient(this);
+				leJeu.connexion(connection, info);
 				this.frmEntreeJeu.dispose();
 				this.frmArene = new Arene();
 				this.frmChoixJoueur = new ChoixJoueur(this);
 				this.frmChoixJoueur.setVisible(true);
+			}else {
+				leJeu.connexion(connection, info);
 			}
 			break;
 		case "reception" :
+			leJeu.reception(connection, info);
 			break;
 		case "deconnexion" :
 			break;

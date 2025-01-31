@@ -1,5 +1,11 @@
 package modele;
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Hashtable;
+
+import controler.Controle;
+import outils.connexion.AsyncResponse;
+import outils.connexion.Connection;
 
 /**
  * Gestion du jeu côté serveur
@@ -8,26 +14,34 @@ import java.util.ArrayList;
 public class JeuServeur extends Jeu {
 
 	/**
+	 * Controleur de Jeu redéfini ds la classe fille
+	 */
+	Controle controle;
+	/**
 	 * Collection de murs
 	 */
 	private ArrayList<Mur> lesMurs = new ArrayList<Mur>() ;
 	/**
 	 * Collection de joueurs
 	 */
-	private ArrayList<Joueur> lesJoueurs = new ArrayList<Joueur>() ;
+	private Hashtable<Connection, Joueur> lesJoueurs = new Hashtable<Connection, Joueur>() ;
 	
 	/**
 	 * Constructeur
 	 */
-	public JeuServeur() {
+	public JeuServeur(Controle controle) {
 	}
 	
+	/**
+	 * Réception d'une connexion (pour communiquer avec un ordinateur distant)
+	 */
 	@Override
-	public void connexion() {
+	public void connexion(Connection connection, Socket socket, AsyncResponse delegate) {
+		lesJoueurs.put(connection, new Joueur()) ;
 	}
 
 	@Override
-	public void reception() {
+	public void reception(Connection connection, Object info) {
 	}
 	
 	@Override

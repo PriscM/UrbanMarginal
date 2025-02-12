@@ -11,6 +11,7 @@ import vue.Arene;
 import vue.ChoixJoueur;
 import vue.EntreeJeu;
 import vue.ChoixJoueur;
+import javax.swing.JPanel;
 
 /**
  * Contrôleur et point d'entrée de l'applicaton 
@@ -57,11 +58,12 @@ public class Controle implements AsyncResponse, Global {
 	 * @param info information à traiter
 	 */
 	public void evenementEntreeJeu(String info) {
-		if(info.equals("serveur")) {			
+		if(info.equals(SERVEUR)) {			
 			new ServeurSocket(this, PORT);
 			this.leJeu = new JeuServeur(this);
-			this.frmEntreeJeu.dispose();
+			this.frmEntreeJeu.dispose();			
 			this.frmArene = new Arene();
+			((JeuServeur)this.leJeu).constructionMurs();
 			this.frmArene.setVisible(true);
 		} else {
 			new ClientSocket(this, info, PORT);
@@ -80,6 +82,33 @@ public class Controle implements AsyncResponse, Global {
 		this.leJeu= new JeuClient(this);
 		((JeuClient)leJeu).envoi(PSEUDO+STRINGSEPARE+pseudo+STRINGSEPARE+num_perso);
 	}
+	/**
+	 * Informations provenant de JeuServeur pour ajouter des murs
+	 * @param ordre de JeuServeur
+	 * @param info que la méthode va exécuter selon ordre
+	 */
+	public void evenementJeuServeur (String ordre, Object info) {
+		switch(ordre) {
+		case AJOUTMUR :
+			frmArene.ajoutMurs(info);
+			break;
+		case AJOUTPANELMURS :
+			this.leJeu.envoi((Connection)info, this.frmArene.getJpnMurs());
+			}
+	}
+	
+	/**
+	 * Demande provenant de JeuClient
+	 * @param ordre ordre à exécuter
+	 * @param info information à traiter
+	 */
+	public void evenementJeuClient(String ordre, Object info) {
+		switch(ordre) {
+		case AJOUTPANELMURS :
+			this.frmArene.setJpnMurs((JPanel)info);
+			break;
+			}
+		}
 	
 	/**
 	 * Envoi d'informations vers l'ordinateur distant
@@ -112,4 +141,6 @@ public class Controle implements AsyncResponse, Global {
 			break;
 		}		
 	}
+	
+	
 }

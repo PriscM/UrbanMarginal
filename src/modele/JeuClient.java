@@ -1,15 +1,15 @@
 package modele;
 
-import java.net.Socket;
-
+import javax.swing.JPanel;
 import controler.Controle;
+import controler.Global;
 import outils.connexion.Connection;
 
 /**
  * Gestion du jeu côté client
  *
  */
-public class JeuClient extends Jeu {
+public class JeuClient extends Jeu implements Global {
 	/**
 	 * Controleur de Jeu redéfini ds la classe fille
 	 */
@@ -35,6 +35,10 @@ public class JeuClient extends Jeu {
 
 	@Override
 	public void reception(Connection connection, Object info) {
+		if(info instanceof JPanel) {
+			// arrivée du panel des murs
+			this.controle.evenementJeuClient(AJOUTPANELMURS, info);
+		}
 	}
 	
 	@Override

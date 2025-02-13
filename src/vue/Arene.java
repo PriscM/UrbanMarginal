@@ -11,7 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import controler.Global;
+import controleur.Global;
 
 /**
  * frame de l'arène du jeu
@@ -25,6 +25,14 @@ public class Arene extends JFrame implements Global {
 	 */
 	private JPanel contentPane;
 	/**
+	 * Panel contenant les murs
+	 */
+	private JPanel jpnMurs;
+	/**
+	 * Panel contenant les joueurs et les boules
+	 */
+	private JPanel jpnJeu;
+	/**
 	 * Zone de saisie du t'chat
 	 */
 	private JTextField txtSaisie;
@@ -32,36 +40,56 @@ public class Arene extends JFrame implements Global {
 	 * Zone d'affichage du t'chat
 	 */
 	private JTextArea txtChat ;
-	/**
-	 * Panel contenant les murs
-	 */
-	private JPanel jpnMurs;
 	
 	/**
-	 * getter sur la zone d'affichage des murs
-	 * @return jpnMurs
+	 * @return the jpnMurs
 	 */
 	public JPanel getJpnMurs() {
 		return jpnMurs;
 	}
+
 	/**
-	 * setter sur la zone d'affichage complète des murs
-	 * @param jpanel zone d'affichage à ajouter à celle des murs
+	 * @param jpnMurs the jpnMurs to set
 	 */
 	public void setJpnMurs(JPanel jpnMurs) {
 		this.jpnMurs.add(jpnMurs);
 		this.jpnMurs.repaint();
 	}
-	
+
 	/**
-	 * Méthode pour ajouter des murs
-	 * @param mur objet mur
+	 * @return the jpnJeu
 	 */
-	public void ajoutMurs(Object mur) {
-		jpnMurs.add((JPanel)mur);
-		jpnMurs.repaint();
+	public JPanel getJpnJeu() {
+		return jpnJeu;
 	}
 
+	/**
+	 * @param jpnJeu the jpnJeu to set
+	 */
+	public void setJpnJeu(JPanel jpnJeu) {
+		this.jpnJeu.removeAll();
+		this.jpnJeu.add(jpnJeu);
+		this.jpnJeu.repaint();
+	}
+
+	/**
+	 * Ajoute un mur dans le panel des murs
+	 * @param unMur le mur à ajouter
+	 */
+	public void ajoutMurs(Object unMur) {
+		jpnMurs.add((JLabel)unMur);
+		jpnMurs.repaint();
+	}
+	
+	/**
+	 * Ajout d'un joueur, son message ou sa boule, dans le panel de jeu
+	 * @param unJLabel le label à ajouter
+	 */
+	public void ajoutJLabelJeu(JLabel unJLabel) {
+		this.jpnJeu.add(unJLabel);
+		this.jpnJeu.repaint();
+	}
+	
 	/**
 	 * Create the frame.
 	 */
@@ -77,14 +105,19 @@ public class Arene extends JFrame implements Global {
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		/**
-		 * Zone qui recevra les murs du jeu
-		 */
-		JPanel jpnMurs=new JPanel();
-		jpnMurs.setOpaque(false);
-		jpnMurs.setBounds(0,0,LARGEURARENE, HAUTEURARENE);
-		
 	
+		jpnJeu = new JPanel();
+		jpnJeu.setBounds(0, 0, LARGEURARENE, HAUTEURARENE);
+		jpnJeu.setOpaque(false);
+		jpnJeu.setLayout(null);		
+		contentPane.add(jpnJeu);
+		
+		jpnMurs = new JPanel();
+		jpnMurs.setBounds(0, 0, LARGEURARENE, HAUTEURARENE);
+		jpnMurs.setOpaque(false);
+		jpnMurs.setLayout(null);		
+		contentPane.add(jpnMurs);
+		
 		txtSaisie = new JTextField();
 		txtSaisie.setBounds(0, 600, 800, 25);
 		contentPane.add(txtSaisie);

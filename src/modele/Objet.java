@@ -18,32 +18,31 @@ public abstract class Objet {
 	 */
 	protected Integer posY ;
 	/**
-	 * zone où sera l'objet
+	 * label contenant l'objet graphique (personnage, mur, boule)
 	 */
-	protected JLabel jLabel ;
+	protected JLabel jLabel;
 	
 	/**
-	 * getter sur la propriété jLabel
+	 * @return the jLabel
 	 */
-	public JLabel getJLabel() {
+	public JLabel getjLabel() {
 		return jLabel;
 	}
-	
+
 	/**
 	 * contrôle si l'objet actuel touche l'objet passé en paramètre
 	 * @param objet contient l'objet à contrôler
 	 * @return true si les 2 objets se touchent
 	 */
 	public Boolean toucheObjet (Objet objet) {
-		return null;
-	}
-
-	/**
-	 * getter sur la propriété jLabel
-	 */
-	public JLabel getJlabel() {
-		// TODO Auto-generated method stub
-		return null;
+		if (objet.jLabel==null || objet.jLabel==null) {
+			return false ;
+		}else{
+			return(this.posX+this.jLabel.getWidth()>objet.posX &&
+				this.posX<objet.posX+objet.jLabel.getWidth() && 
+				this.posY+this.jLabel.getHeight()>objet.posY &&
+				this.posY<objet.posY+objet.jLabel.getHeight()) ;
+		}
 	}
 	
 }

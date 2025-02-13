@@ -3,6 +3,7 @@ package vue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -11,10 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import controleur.Controle;
+
 import java.awt.Cursor;
 import java.awt.Dimension;
-
-import controler.Controle;
 
 /**
  * Frame du choix du joueur
@@ -23,11 +24,10 @@ import controler.Controle;
  */
 public class ChoixJoueur extends JFrame {
 
-	Controle controle;	
 	/**
-	 * nb max de perso
+	 * Nombre de personnages différents
 	 */
-	private static final int NBPERSO=3;
+	private static final int NBPERSOS = 3;
 	/**
 	 * Panel général
 	 */
@@ -37,15 +37,55 @@ public class ChoixJoueur extends JFrame {
 	 */
 	private JTextField txtPseudo;
 	/**
-	 * Label choix de personnage 
+	 * Label d'affichage du personnage
 	 */
 	private JLabel lblPersonnage;
 	/**
-	 * Numéro perso affiché en premier
+	 * Instance du contrôleur pour communiquer avec lui
 	 */
-	private int num_perso;
+	private Controle controle;
+	/**
+	 * Numéro du personnage sélectionné
+	 */
+	private int numPerso;
 
+	/**
+	 * Clic sur la flèche "précédent" pour afficher le personnage précédent
+	 */
+	private void lblPrecedent_clic() {
+		numPerso = ((numPerso+1)%NBPERSOS)+1;
+		affichePerso();
+	}
 	
+	/**
+	 * Clic sur la flèche "suivant" pour afficher le personnage suivant
+	 */
+	private void lblSuivant_clic() {
+		numPerso = (numPerso%NBPERSOS)+1 ;
+		affichePerso();
+	}
+	
+	/**
+	 * Clic sur GO pour envoyer les informations
+	 */
+	private void lblGo_clic() {
+		if(this.txtPseudo.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "La saisie du pseudo est obligatoire");
+			this.txtPseudo.requestFocus();
+		} else {
+			this.controle.evenementChoixJoueur(this.txtPseudo.getText(), numPerso);
+		}
+	}
+	
+	/**
+	 * Affichage du personnage correspondant au numéro numPerso
+	 */
+	private void affichePerso() {
+		String chemin = "personnages/perso"+this.numPerso+"marche"+1+"d"+1+".gif";
+		URL resource = getClass().getClassLoader().getResource(chemin);
+		this.lblPersonnage.setIcon(new ImageIcon(resource));		
+	}
+
 	/**
 	 * Change le curseur de la souris en forme normale
 	 */
@@ -59,98 +99,58 @@ public class ChoixJoueur extends JFrame {
 	private void sourisDoigt() {
 		contentPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
 	}
-	
-	/**
-	 * Afficher l'image du personnage	
-	 * @param num_perso
-	 */
-	private void affichePerso() {
-		String chemin = "personnages/perso"+this.num_perso+"marche"+1+"d"+1+".gif";
-		URL resource = getClass().getClassLoader().getResource(chemin);
-		this.lblPersonnage.setIcon(new ImageIcon(resource));
-	}
-	
-	/**
-	 * Clic sur la flèche "précédent" pour afficher le personnage précédent
-	 */
-	private void lblPrecedent_clic() {
-		num_perso = ((num_perso+1)%NBPERSO)+1;
-		affichePerso();
-	}
-	
-	/**
-	 * Clic sur la flèche "suivant" pour afficher le personnage suivant
-	 */
-	private void lblSuivant_clic() {
-		num_perso = (num_perso%NBPERSO)+1 ;
-		affichePerso();
-	}
-	
-	/**
-	 * Clic sur GO pour envoyer les informations
-	 */
-	private void lblGo_clic() {
-		if (txtPseudo.getText().equals("")){
-			JOptionPane.showMessageDialog(null, "La saisie du pseudo est obligatoire");	
-			this.txtPseudo.requestFocus();
-		}
-		else {
-			this.controle.evenementChoixJoueur(txtPseudo.getText(), num_perso);
-		}
-	}
 
-	
 	/**
 	 * Create the frame.
-	 * * @param controle instance du contrôleur
+	 * @param controle instance du contrôleur
 	 */
 	public ChoixJoueur(Controle controle) {
 		// Dimension de la frame en fonction de son contenu
 		this.getContentPane().setPreferredSize(new Dimension(400, 275));
 	    this.pack();
 	    // interdiction de changer la taille
-		this.setResizable(false);		
+		this.setResizable(false);
 		 
 		setTitle("Choice");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		lblPersonnage = new JLabel("");
 		lblPersonnage.setBounds(142, 115, 120, 120);
 		lblPersonnage.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(lblPersonnage);		
+		contentPane.add(lblPersonnage);
 		
 		JLabel lblPrecedent = new JLabel("");
 		lblPrecedent.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				sourisDoigt();
-			}			
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				sourisNormale();
-			}			
-			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				lblPrecedent_clic();
-			}			
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				sourisDoigt();
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				sourisNormale();
+			}
 		});
 		
 		JLabel lblSuivant = new JLabel("");
 		lblSuivant.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				sourisDoigt();
-			}			
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				sourisNormale();
-			}	
-			@Override
 			public void mouseClicked(MouseEvent e) {
 				lblSuivant_clic();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				sourisDoigt();
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				sourisNormale();
 			}
 		});
 		
@@ -181,21 +181,6 @@ public class ChoixJoueur extends JFrame {
 		contentPane.add(lblSuivant);
 		lblPrecedent.setBounds(65, 146, 31, 45);
 		contentPane.add(lblPrecedent);
-		lblGo.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				sourisDoigt();
-			}			
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				sourisNormale();
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				lblGo_clic();
-			}
-		});
-		
 		
 		JLabel lblFond = new JLabel("");
 		lblFond.setBounds(0, 0, 400, 275);
@@ -208,13 +193,11 @@ public class ChoixJoueur extends JFrame {
 		this.controle = controle;
 		
 		// affichage du premier personnage
-		this.num_perso=1;
+		this.numPerso = 1;
 		this.affichePerso();
-		
+
 		// positionnement sur la zone de saisie
 		txtPseudo.requestFocus();
-		
-	
 
 	}
 }

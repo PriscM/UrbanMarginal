@@ -1,8 +1,6 @@
 package modele;
 
-import java.net.Socket;
-
-import controler.Controle;
+import controleur.Controle;
 import outils.connexion.Connection;
 
 /**
@@ -10,19 +8,22 @@ import outils.connexion.Connection;
  *
  */
 public abstract class Jeu {
+	
 	/**
-	 * propriété de type Controle
+	 * Instance de Controle, pour communiquer avec le contrôleur
 	 */
 	protected Controle controle;
 
 	/**
 	 * Réception d'une connexion (pour communiquer avec un ordinateur distant)
-	 * * @param connection TODO
+	 * @param connection objet connection pour la communication
 	 */
 	public abstract void connexion(Connection connection) ;
 	
 	/**
 	 * Réception d'une information provenant de l'ordinateur distant
+	 * @param connection objet de connexion d'où provient l'information
+	 * @param info information reçue
 	 */
 	public abstract void reception(Connection connection, Object info) ;
 	
@@ -33,6 +34,8 @@ public abstract class Jeu {
 	
 	/**
 	 * Envoi d'une information vers un ordinateur distant
+	 * @param connection objet de connexion pour accéder à l'ordinateur distant
+	 * @param info information à envoyer
 	 */
 	public void envoi(Connection connection, Object info) {
 		this.controle.envoi(connection, info);

@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import controler.Controle;
+import controleur.Controle;
 
 /**
  * Frame de l'entrée dans le jeu (choix entre serveur et client)

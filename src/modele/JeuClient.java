@@ -1,8 +1,9 @@
 package modele;
 
 import javax.swing.JPanel;
-import controler.Controle;
-import controler.Global;
+
+import controleur.Controle;
+import controleur.Global;
 import outils.connexion.Connection;
 
 /**
@@ -10,24 +11,21 @@ import outils.connexion.Connection;
  *
  */
 public class JeuClient extends Jeu implements Global {
-	/**
-	 * Controleur de Jeu redéfini ds la classe fille
-	 */
-	public Controle controle;
+	
 	/**
 	 * objet de connexion pour communiquer avec le serveur
 	 */
-	public Connection connection;
-	/**
-	 * Constructreur
-	 */
-	public JeuClient(Controle controle) {
-		super.controle=controle;
-	}
+	private Connection connection;
+	private Boolean mursOk = false;
 	
 	/**
-	 * Réception d'une connexion (pour communiquer avec un ordinateur distant)
+	 * Controleur
+	 * @param controle instance du contrôleur pour les échanges
 	 */
+	public JeuClient(Controle controle) {
+		super.controle = controle;
+	}
+	
 	@Override
 	public void connexion(Connection connection) {
 		this.connection = connection;
@@ -36,8 +34,14 @@ public class JeuClient extends Jeu implements Global {
 	@Override
 	public void reception(Connection connection, Object info) {
 		if(info instanceof JPanel) {
-			// arrivée du panel des murs
-			this.controle.evenementJeuClient(AJOUTPANELMURS, info);
+			if(!this.mursOk) {
+				// arrivée du panel des murs
+				this.controle.evenementJeuClient(AJOUTPANELMURS, info);
+				this.mursOk = true;
+			} else {
+				// arrivée du panel de jeu
+				this.controle.evenementJeuClient(MODIFPANELJEU, info);
+			}
 		}
 	}
 	
@@ -50,7 +54,7 @@ public class JeuClient extends Jeu implements Global {
 	 * fais appel une fois à l'envoi dans la classe Jeu
 	 * @param info information à envoyer au serveur
 	 */
-	public void envoi(Object info) {
+	public void envoi(String info) {
 		super.envoi(this.connection, info);
 	}
 

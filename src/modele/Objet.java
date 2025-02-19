@@ -5,7 +5,6 @@ import javax.swing.JLabel;
 /**
  * Informations communes à tous les objets (joueurs, murs, boules)
  * permet de mémoriser la position de l'objet et de gérer les  collisions
- *
  */
 public abstract class Objet {
 
@@ -22,7 +21,7 @@ public abstract class Objet {
 	 */
 	protected JLabel jLabel;
 	
-	/**
+	/**Getter sur jLabel
 	 * @return the jLabel
 	 */
 	public JLabel getjLabel() {

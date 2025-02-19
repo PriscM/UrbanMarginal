@@ -48,6 +48,14 @@ public class JeuServeur extends Jeu implements Global {
 			String pseudo = infos[1];
 			int numPerso = Integer.parseInt(infos[2]);
 			this.lesJoueurs.get(connection).initPerso(pseudo, numPerso, this.lesJoueurs.values(), this.lesMurs);
+			String premierMessage = "*** "+pseudo+" vient de se connecter ***";
+			this.controle.evenementJeuServeur(AJOUTPHRASE, premierMessage);
+			break;
+		case TCHAT:
+			//arrivée des informations du tchat
+			String phrase = infos[1];
+			phrase = this.lesJoueurs.get(connection).getPseudo()+">"+phrase;
+			this.controle.evenementJeuServeur(AJOUTPHRASE, info);
 			break;
 		}
 	}
@@ -56,15 +64,23 @@ public class JeuServeur extends Jeu implements Global {
 	public void deconnexion() {
 	}
 
+	/**
+	 * Ajoute un panel sur l'arène de jeu côté serveur
+	 * @param jLabel
+	 */
 	public void ajoutJLabelJeuArene(JLabel jLabel) {
 		this.controle.evenementJeuServeur(AJOUTJLABELJEU, jLabel);
 	}
 	
 	/**
 	 * Envoi d'une information vers tous les clients
-	 * fais appel plusieurs fois à l'envoi de la classe Jeu
+	 * fait appel plusieurs fois à l'envoi de la classe Jeu
+	 * @param info à envoyer à tous les clients
 	 */
-	public void envoi() {
+	public void envoi(Object info) {
+		for(Connection connection : this.lesJoueurs.keySet()) {
+			super.envoi(connection, info);
+		}
 	}
 
 	/**
@@ -85,5 +101,6 @@ public class JeuServeur extends Jeu implements Global {
 			this.controle.evenementJeuServeur(AJOUTMUR, lesMurs.get(lesMurs.size()-1).getjLabel());
 		}
 	}
+	
 	
 }

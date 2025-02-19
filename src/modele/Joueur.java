@@ -49,6 +49,12 @@ public class Joueur extends Objet implements Global {
 	 * tourné vers la gauche (0) ou vers la droite (1)
 	 */
 	private int orientation ;
+	/**Getteur sur pseudo
+	 * @return the pseudo
+	 */
+	public String getPseudo() {
+		return pseudo;
+	}
 	
 	/**
 	 * Constructeur : récupératon de jeuServeur et initialisaton de certaines propriétés

@@ -16,6 +16,9 @@ public class JeuClient extends Jeu implements Global {
 	 * objet de connexion pour communiquer avec le serveur
 	 */
 	private Connection connection;
+	/**
+	 * devient true quand les murs sont ajoutés au panel associé
+	 */
 	private Boolean mursOk = false;
 	
 	/**
@@ -42,6 +45,8 @@ public class JeuClient extends Jeu implements Global {
 				// arrivée du panel de jeu
 				this.controle.evenementJeuClient(MODIFPANELJEU, info);
 			}
+		}else if (info instanceof String) {
+			this.controle.evenementJeuClient(MODIFTCHAT, info);
 		}
 	}
 	

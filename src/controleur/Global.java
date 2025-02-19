@@ -150,6 +150,11 @@ public interface Global {
 	 * orientation du personnage vers la droite
 	 */
 	int DROITE = 1;
+	
+	/**
+	 * Message "client" pour la création d'un client
+	 */
+	String CLIENT = "client";
 	/**
 	 * Message "serveur" pour la création d'un serveur
 	 */
@@ -167,8 +172,20 @@ public interface Global {
 	 */
 	String AJOUTJLABELJEU = "ajout jLabel jeu";
 	/**
-	 * ordre pour modifier le panel du jeu dans l'aeène du client
+	 * ordre pour modifier le panel du jeu dans l'arène du client
 	 */
 	String MODIFPANELJEU = "modif panel jeu";
-
+	
+	/**
+	 * ordre pour envoyer un msg dans le tchat
+	 */
+	String TCHAT="tchat";
+	/**
+	 * ordre pour ajouter phrase
+	 */
+	String AJOUTPHRASE="ajout phrase";
+	/**
+	 * ordre pour modifier le tchat
+	 */
+	String MODIFTCHAT="modif tchat";
 }
